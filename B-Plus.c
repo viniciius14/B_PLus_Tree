@@ -54,7 +54,7 @@ record_st* read_line(int argc, char* argv[]) {
         return NULL;
     }
     
-    FILE* fp = fopen(argv[1], "r+");
+    FILE* fp = fopen_s(argv[1],"Teste", "r+");//may need change
 
     if (fp == NULL) {
         printf("Error opening your file!");
@@ -65,7 +65,7 @@ record_st* read_line(int argc, char* argv[]) {
     char* temp_key = malloc(sizeof(char) * 10);//max 10 digits
     char* temp_year = malloc(sizeof(char) * 10);
 
-    fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_key, test->name, test->birthdate, test->prize, temp_year, test->country, test->comment);
+    fscanf_s(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_key, test->name, test->birthdate, test->prize, temp_year, test->country, test->comment);
 
     test->key = char_to_num(temp_key);
     test->year = char_to_num(temp_year);
