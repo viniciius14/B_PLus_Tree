@@ -3,15 +3,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+
 //All Warnings Syntax
 //gcc -Wall -Wextra -Wpedantic -ansi -std=c99 -g b_plus.c -o b_plus
 //.\b_plus.exe C:\\Users\\rodri\\Documents\\GitHub\\B-Plus-Tree\\teste.txt
 
+//masi um teste
 
-
-
-
-//this is a test
 
 
 typedef struct record_st {
@@ -26,16 +24,16 @@ typedef struct record_st {
 
 
 typedef struct tree_node {
-    tree_node* parent;
-    tree_node* child;
-    tree_node* next;//maybe not
+    struct tree_node* parent;
+    struct tree_node* child;
+    struct tree_node* next;//maybe not
     record_st* information;
 }tree_node;
 
 
 typedef struct list_node {//if we do a linked list
-    list_node* next;
-    list_node* prev;
+    struct list_node* next;
+    struct list_node* prev;
     record_st* contents;
 }list_node;
 
@@ -56,10 +54,10 @@ int char_to_num(char arr[]) {
 record_st* read_line(int argc, char* argv[]) {
 
     if (argc != 2) {
-        printf("You called to many or to few argumetns!");
+        printf("You called to many or to few arguments!");
         return NULL;
     }
-
+    
     FILE* fp = fopen(argv[1], "r+");
 
     if (fp == NULL) {
