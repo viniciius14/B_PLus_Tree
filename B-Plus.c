@@ -1,5 +1,5 @@
 
-#define _CRT_SECURE_NO_DEPRECATE
+#define _CRT_SECURE_NO_DEPRECATE //done so microsoft visual studio lets me using fscanf and fopen_s instead of fscanf_s and fopen_s respectively
 
 #include <stdio.h>
 #include <stdint.h>
@@ -21,7 +21,6 @@ typedef struct record_st {
     char country[100];
     char comment[80];
 } record_st;
-
 
 typedef struct tree_node {
     struct tree_node* parent;
