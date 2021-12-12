@@ -1,0 +1,5 @@
+012345678;rodrigo;23/09/2002;o premio e dinero;2022;portugal;esta e a parte do comment5
+123456780;joao;13/12/2002;o premio e muito dinheiro;2021;espanha;esta e a parte do comment4
+164567801;leandro;21/01/2002;o premio e um jantar;2020;inglaterra;esta e a parte do comment3
+1515678012;anabela;16/05/2002;o premio e paz de mente;2019;franca;esta e a parte do comment2
+000345678;joana;19/07/2002;o premio e uma piada;2018;arabia saudita;esta e a parte do comment1

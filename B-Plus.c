@@ -8,10 +8,6 @@
 //gcc -Wall -Wextra -Wpedantic -ansi -std=c99 -g b_plus.c -o b_plus
 //.\b_plus.exe C:\\Users\\rodri\\Documents\\GitHub\\B-Plus-Tree\\teste.txt
 
-//masi um teste
-
-
-
 typedef struct record_st {
     int32_t key;
     char name[100];
