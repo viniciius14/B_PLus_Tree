@@ -1,3 +1,6 @@
+
+#define _CRT_SECURE_NO_DEPRECATE
+
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -6,7 +9,8 @@
 
 //All Warnings Syntax
 //gcc -Wall -Wextra -Wpedantic -ansi -std=c99 -g b_plus.c -o b_plus
-//.\b_plus.exe C:\\Users\\rodri\\Documents\\GitHub\\B-Plus-Tree\\teste.txt
+//.\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\teste.txt
+
 
 typedef struct record_st {
     int32_t key;
@@ -54,7 +58,7 @@ record_st* read_line(int argc, char* argv[]) {
         return NULL;
     }
     
-    FILE* fp = fopen_s(argv[1],"Teste", "r+");//may need change
+    FILE* fp = fopen(argv[1],"r+");//may need change
 
     if (fp == NULL) {
         printf("Error opening your file!");
@@ -65,7 +69,7 @@ record_st* read_line(int argc, char* argv[]) {
     char* temp_key = malloc(sizeof(char) * 10);//max 10 digits
     char* temp_year = malloc(sizeof(char) * 10);
 
-    fscanf_s(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_key, test->name, test->birthdate, test->prize, temp_year, test->country, test->comment);
+    fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_key, test->name, test->birthdate, test->prize, temp_year, test->country, test->comment);
 
     test->key = char_to_num(temp_key);
     test->year = char_to_num(temp_year);
