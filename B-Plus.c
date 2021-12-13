@@ -11,6 +11,9 @@
 //gcc -Wall -Wextra -Wpedantic -ansi -std=c99 -g b_plus.c -o b_plus
 //.\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\teste.txt
 
+// L = 5 because 4KB / 708 B = 5.66, each block can store 5 records
+// M = 500  because block size = 4KB, id size = 4B, pointers = 4B,  4KB/(4B+4B) = 500
+
 
 typedef struct record_st {
     uint32_t id;
@@ -29,32 +32,28 @@ typedef struct record_st {
 } record_st;
 
 typedef struct tree_node {
-    struct tree_node* parent;
     struct tree_node* child;
-    struct tree_node* next;//maybe not
-    record_st* information;
+    uint32_t id;
+    //struct tree_node* parent;//maybe not
+    //struct tree_node* next;//WHATS IS NEXT??
+    //record_st* information;//only if its a leaf node
 }tree_node;
 
-
-typedef struct list_node {//if we do a linked list
+typedef struct list_node {
     struct list_node* next;
-    struct list_node* prev;
+    struct list_node* prev;//maybe not needed
     record_st* contents;
 }list_node;
 
-
-
 int char_to_num(char arr[]) {
-    int32_t num = 0;
+    uint32_t num = 0;
 
-    for (int32_t x = 0; arr[x] != '\0'; x++) {
+    for (uint32_t x = 0; arr[x] != '\0'; x++) {
         num = 10 * num + (arr[x] - '0');
     }
 
     return num;
 }
-
-
 
 record_st* read_line(int argc, char* argv[]) {
 
