@@ -13,13 +13,19 @@
 
 
 typedef struct record_st {
-    int32_t key;
-    char name[100];
-    char birthdate[12];
-    char prize[100];
-    int32_t year;
-    char country[100];
-    char comment[80];
+    uint32_t id;
+    char firstname[100];
+    char surname[100];
+    char birthdate[11];
+    char country[50];
+    char countryCode[3];
+    char city[50];
+    char died[11];
+    char gender[7];
+    uint32_t year;
+    char category[12];
+    uint32_t share;
+    char motivation[350];
 } record_st;
 
 typedef struct tree_node {
@@ -65,15 +71,16 @@ record_st* read_line(int argc, char* argv[]) {
     }
 
     record_st* test = malloc(sizeof(*test));
-    char* temp_key = malloc(sizeof(char) * 10);//max 10 digits
+    char* temp_id = malloc(sizeof(char) * 10);//max 10 digits
     char* temp_year = malloc(sizeof(char) * 10);
+    char* temp_share = malloc(sizeof(char) * 10);
 
-    fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_key, test->name, test->birthdate, test->prize, temp_year, test->country, test->comment);
+    fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, test->firstname, test->surname, test->birthdate, test->country, test->countryCode, test->city, test->died, test->gender, temp_year, test->category, temp_share, test->motivation);
 
-    test->key = char_to_num(temp_key);
+    test->id = char_to_num(temp_id);
     test->year = char_to_num(temp_year);
+    test->share = char_to_num(temp_share);
 
-    fclose(fp);
     return test;
 }
 
