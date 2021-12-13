@@ -1,6 +1,8 @@
 
 #define _CRT_SECURE_NO_DEPRECATE //done so microsoft visual studio lets me use fscanf and fopen instead of fscanf_s and fopen_s respectively
+
 #define M 5
+#define L 5//might delete later
 //possibilidade de fazer uma conta antes do define M e atribuir o resultado dessa conta ao M
 
 #include <stdio.h>
@@ -74,29 +76,29 @@ record_st* read_line(int argc, char* argv[]) {
         return NULL;
     }
 
-    record_st* test = malloc(sizeof(test));
-    char* temp_id = malloc(sizeof(char) * 10);//max 10 digits
-    char* temp_year = malloc(sizeof(char) * 10);
-    char* temp_share = malloc(sizeof(char) * 10);
+    record_st* node = (record_st*) calloc(1,sizeof(record_st));//using calloc so all values are initialized as 0
+    char* temp_id = (char*) calloc(10,sizeof(char));//max 10 digits
+    char* temp_year = (char*) calloc(10, sizeof(char));
+    char* temp_share = (char*) calloc(10, sizeof(char));
 
-    //node standardization
-    //
-    //
 
-    if (fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, test->firstname, test->surname, test->birthdate, test->died, test->country, test->countryCode, test->city, test->gender, temp_year, test->category, temp_share, test->motivation) == 0) {
+    if (fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, node->firstname, node->surname, node->birthdate, node->died, node->country, node->countryCode, node->city, node->gender, temp_year, node->category, temp_share, node->motivation) == 0) {
         return NULL;//if fscanf returns 0 means we are at the end of the file
     }
     else {
-        test->id = char_to_num(temp_id);
-        test->year = char_to_num(temp_year);
-        test->share = char_to_num(temp_share);
+        node->id = char_to_num(temp_id);
+        node->year = char_to_num(temp_year);
+        node->share = char_to_num(temp_share);
     }
 ;
 
-    return test;
+    return node;
 }
 
-int insert_node(record_st* node, tree_node arr[]) {//tenho que mudar isto para tree_node para poder tem um ponteiro para o leaf node onde vou adicionar o novo elem
+void insert_node(record_st* node, tree_node arr[]) {//tenho que mudar isto para tree_node para poder tem um ponteiro para o leaf node onde vou adicionar o novo elem
+    if (node == NULL) {//we are at the end of the file
+        return NULL;
+    }
     if ((&arr[0])->child == NULL) {//is leaf?
         int idx;
         for (int i = 0; i != M; i++) {
@@ -130,11 +132,12 @@ int insert_node(record_st* node, tree_node arr[]) {//tenho que mudar isto para t
 
 int main(int argc, char* argv[]) {
 
-    tree_node* initial_arr = malloc(sizeof(tree_node));
+    tree_node* root_arr = (tree_node*) calloc(5,sizeof(tree_node));
+
     //first fill the initial array and its leaf nodes
     //then complete the more complex mid tree arrays and leaf nodes
-
-    insert_node( read_line(argc, argv), initial_arr);
+    //while (insert_node != NULL) {insert_node(read_line(argc, argv),root_arr);}
+    insert_node(read_line(argc, argv),root_arr);
 
     return 0;
 }
