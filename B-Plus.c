@@ -1,5 +1,5 @@
 
-#define _CRT_SECURE_NO_DEPRECATE //done so microsoft visual studio lets me using fscanf and fopen_s instead of fscanf_s and fopen_s respectively
+#define _CRT_SECURE_NO_DEPRECATE //done so microsoft visual studio lets me use fscanf and fopen instead of fscanf_s and fopen_s respectively
 
 #include <stdio.h>
 #include <stdint.h>
@@ -20,10 +20,10 @@ typedef struct record_st {
     char firstname[100];
     char surname[100];
     char birthdate[11];
+    char died[11];
     char country[50];
     char countryCode[3];
     char city[50];
-    char died[11];
     char gender[7];
     uint32_t year;
     char category[12];
@@ -74,11 +74,15 @@ record_st* read_line(int argc, char* argv[]) {
     char* temp_year = malloc(sizeof(char) * 10);
     char* temp_share = malloc(sizeof(char) * 10);
 
-    fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, test->firstname, test->surname, test->birthdate, test->country, test->countryCode, test->city, test->died, test->gender, temp_year, test->category, temp_share, test->motivation);
-
-    test->id = char_to_num(temp_id);
-    test->year = char_to_num(temp_year);
-    test->share = char_to_num(temp_share);
+    if (fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, test->firstname, test->surname, test->birthdate, test->died, test->country, test->countryCode, test->city, test->gender, temp_year, test->category, temp_share, test->motivation) == 0) {
+        return NULL;
+    }
+    else {
+        test->id = char_to_num(temp_id);
+        test->year = char_to_num(temp_year);
+        test->share = char_to_num(temp_share);
+    }
+;
 
     return test;
 }
