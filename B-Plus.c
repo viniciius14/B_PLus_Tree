@@ -1,5 +1,7 @@
 
 #define _CRT_SECURE_NO_DEPRECATE //done so microsoft visual studio lets me use fscanf and fopen instead of fscanf_s and fopen_s respectively
+#define M 5
+//possibilidade de fazer uma conta antes do define M e atribuir o resultado dessa conta ao M
 
 #include <stdio.h>
 #include <stdint.h>
@@ -32,8 +34,9 @@ typedef struct record_st {
 } record_st;
 
 typedef struct tree_node {
-    struct tree_node* child;
     uint32_t id;
+    struct tree_node* child;
+    list_node* list;//will point to first element of the linked list
     //struct tree_node* parent;//maybe not
     //struct tree_node* next;//WHATS IS NEXT??
     //record_st* information;//only if its a leaf node
@@ -41,8 +44,10 @@ typedef struct tree_node {
 
 typedef struct list_node {
     struct list_node* next;
-    struct list_node* prev;//maybe not needed
     record_st* contents;
+
+    struct list_node* prev;//maybe not needed
+    int is_leaf; // if it stays it will always equal to 0
 }list_node;
 
 int char_to_num(char arr[]) {
@@ -69,13 +74,17 @@ record_st* read_line(int argc, char* argv[]) {
         return NULL;
     }
 
-    record_st* test = malloc(sizeof(*test));
+    record_st* test = malloc(sizeof(test));
     char* temp_id = malloc(sizeof(char) * 10);//max 10 digits
     char* temp_year = malloc(sizeof(char) * 10);
     char* temp_share = malloc(sizeof(char) * 10);
 
+    //node standardization
+    //
+    //
+
     if (fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, test->firstname, test->surname, test->birthdate, test->died, test->country, test->countryCode, test->city, test->gender, temp_year, test->category, temp_share, test->motivation) == 0) {
-        return NULL;
+        return NULL;//if fscanf returns 0 means we are at the end of the file
     }
     else {
         test->id = char_to_num(temp_id);
@@ -87,13 +96,45 @@ record_st* read_line(int argc, char* argv[]) {
     return test;
 }
 
+int insert_node(record_st* node, tree_node arr[]) {//tenho que mudar isto para tree_node para poder tem um ponteiro para o leaf node onde vou adicionar o novo elem
+    if ((&arr[0])->child == NULL) {//is leaf?
+        int idx;
+        for (int i = 0; i != M; i++) {
+            if (node->id < (&arr[i])->id) {
+                //we know that we have to go to the past i then
+                idx = i - 1;
+            }
+            else {
+                idx = i;
+            }
+        }
 
+        (&arr[idx])->list;
+
+        return -1;
+    }
+    else {
+        for (int i = 0; i != M; i++) {
+            if (node->id < (&arr[i])->id) {
+                //we know that we have to go to the past i then
+                return (i - 1);
+                //go to node i - 1
+            }
+            else {
+                return i;
+            }
+        }
+    }
+
+}
 
 int main(int argc, char* argv[]) {
 
-    read_line(argc, argv);
+    tree_node* initial_arr = malloc(sizeof(tree_node));
+    //first fill the initial array and its leaf nodes
+    //then complete the more complex mid tree arrays and leaf nodes
 
-
+    insert_node( read_line(argc, argv), initial_arr);
 
     return 0;
 }
