@@ -48,7 +48,7 @@ typedef struct list_node {
     struct list_node* next;
     record_st* contents;
 
-    struct list_node* prev;//maybe not needed
+    struct list_node* prev;//maybe not needed is_leaf may be deleted too
     int is_leaf; // if it stays it will always equal to 0
 }list_node;
 
@@ -121,10 +121,12 @@ int* insert_node(record_st* node, tree_node arr[]) {
                 //if true we know that current list node is the correct one
                 //else its gonna be the last
                 return 1;//anything different then NULL will work as a return value
-                }
+            }
         }
         //since we know the last node is the one we're searching for
-
+        position = position->next;
+        add_node(node, position);
+        return 1;
         //for last node elem
         //no need to check last elem cause we know it will be the one we want
 
@@ -144,10 +146,17 @@ int* insert_node(record_st* node, tree_node arr[]) {
         insert_node(node, arr);
     }
 }
+                                                //will receive node and location
+                                                //will check if current list is full
+                                                //incase not full will have to handle separation of next node
 
-add_node(record_st* node, list_node* position) {};   //will receive node and location
-                //will check if current list is full
-                //incase not full will have to handle separation of next node
+add_node(record_st* node, list_node* position) {
+    //check if current list is full
+
+            
+
+
+};   
 
 
 
