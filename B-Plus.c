@@ -90,44 +90,52 @@ record_st* read_line(int argc, char* argv[]) {
         node->year = char_to_num(temp_year);
         node->share = char_to_num(temp_share);
     }
-;
+
 
     return node;
 }
 
-void insert_node(record_st* node, tree_node arr[]) {//tenho que mudar isto para tree_node para poder tem um ponteiro para o leaf node onde vou adicionar o novo elem
+void* insert_node(record_st* node, tree_node arr[]) {
     if (node == NULL) {//we are at the end of the file
         return NULL;
     }
+    int idx;
     if ((&arr[0])->child == NULL) {//is leaf?
-        int idx;
+        
         for (int i = 0; i != M; i++) {
             if (node->id < (&arr[i])->id) {
-                //we know that we have to go to the past i then
                 idx = i - 1;
+                break;
+            }
+            else {
+                idx = i;//no break because it will be the last option
+            }
+        }
+
+        tree_node* list_pt = (&arr)[idx]->list;
+        for (int i = 0; i != M - 1; i++) {
+            if (node->id < (&arr)[idx]->list->contents->id) {
+
+            }
+        }
+        
+
+
+
+    }
+    else {
+        for (int i = 0; i != M; i++) {
+            if (node->id < (&arr[i])->id) {
+                idx = i - 1;
+                break;
             }
             else {
                 idx = i;
             }
         }
-
-        (&arr[idx])->list;
-
-        return -1;
+        arr = arr->child;
+        insert_node(node,arr);
     }
-    else {
-        for (int i = 0; i != M; i++) {
-            if (node->id < (&arr[i])->id) {
-                //we know that we have to go to the past i then
-                return (i - 1);
-                //go to node i - 1
-            }
-            else {
-                return i;
-            }
-        }
-    }
-
 }
 
 int main(int argc, char* argv[]) {
@@ -136,8 +144,12 @@ int main(int argc, char* argv[]) {
 
     //first fill the initial array and its leaf nodes
     //then complete the more complex mid tree arrays and leaf nodes
-    //while (insert_node != NULL) {insert_node(read_line(argc, argv),root_arr);}
-    insert_node(read_line(argc, argv),root_arr);
+
+    void* output;
+    while (output != NULL) {
+        output = insert_node(read_line(argc, argv), root_arr);
+    }
+
 
     return 0;
 }
