@@ -37,7 +37,7 @@ typedef struct record_st {
 
 typedef struct tree_node {
     uint32_t id;
-    struct tree_node* child;
+    struct tree_node* child;//will either have a child pointer or a list pointer equal to NULL
     list_node* list;//will point to first element of the linked list
     //struct tree_node* parent;//maybe not
     //struct tree_node* next;//WHATS IS NEXT??
@@ -68,18 +68,18 @@ record_st* read_line(int argc, char* argv[]) {
         printf("You called to many or to few arguments!");
         return NULL;
     }
-    
-    FILE* fp = fopen(argv[1],"r+");//may need change
+
+    FILE* fp = fopen(argv[1], "r+");//may need change
 
     if (fp == NULL) {
         printf("Error opening your file!");
         return NULL;
     }
 
-    record_st* node = (record_st*) calloc(1,sizeof(record_st));//using calloc so all values are initialized as 0
-    char* temp_id = (char*) calloc(10,sizeof(char));//max 10 digits
-    char* temp_year = (char*) calloc(10, sizeof(char));
-    char* temp_share = (char*) calloc(10, sizeof(char));
+    record_st* node = (record_st*)calloc(1, sizeof(record_st));//using calloc so all values are initialized as 0
+    char* temp_id = (char*)calloc(10, sizeof(char));//max 10 digits
+    char* temp_year = (char*)calloc(10, sizeof(char));
+    char* temp_share = (char*)calloc(10, sizeof(char));
 
 
     if (fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, node->firstname, node->surname, node->birthdate, node->died, node->country, node->countryCode, node->city, node->gender, temp_year, node->category, temp_share, node->motivation) == 0) {
@@ -101,9 +101,9 @@ void* insert_node(record_st* node, tree_node arr[]) {
     }
     int idx;
     if ((&arr[0])->child == NULL) {//is leaf?
-        
+
         for (int i = 0; i != M; i++) {
-            if (node->id < (&arr[i])->id) {
+            if (node->id < (&arr[i])->list->contents->id) {//if the nodes id wich we wanna insert is smaller then the i element of the list
                 idx = i - 1;
                 break;
             }
@@ -118,7 +118,7 @@ void* insert_node(record_st* node, tree_node arr[]) {
 
             }
         }
-        
+
 
 
 
@@ -134,13 +134,13 @@ void* insert_node(record_st* node, tree_node arr[]) {
             }
         }
         arr = arr->child;
-        insert_node(node,arr);
+        insert_node(node, arr);
     }
 }
 
 int main(int argc, char* argv[]) {
 
-    tree_node* root_arr = (tree_node*) calloc(5,sizeof(tree_node));
+    tree_node* root_arr = (tree_node*)calloc(5, sizeof(tree_node));
 
     //first fill the initial array and its leaf nodes
     //then complete the more complex mid tree arrays and leaf nodes
