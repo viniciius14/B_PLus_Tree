@@ -1,3 +1,0 @@
-fzr com 5 nodes, ie L = 5 e M = 5
-
-fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
