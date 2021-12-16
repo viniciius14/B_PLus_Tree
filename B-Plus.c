@@ -14,8 +14,7 @@
 //All Warnings Syntax
 //gcc -Wall -Wextra -Wpedantic -ansi -std=c99 -g b_plus.c -o b_plus
 
-//.\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\teste.txt
-
+//.\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\nobel_prize_winners.csv
 
 
 typedef struct record_st {
@@ -91,8 +90,6 @@ record_st* read_line(int argc, char* argv[]) {
         node->year = char_to_num(temp_year);
         node->share = char_to_num(temp_share);
     }
-
-
     return node;
 }
 
@@ -142,6 +139,7 @@ int* insert_node(record_st* node, tree_node arr[]) {
         arr = (&arr[idx])->child;
         insert_node(node, arr);
     }
+    //gotta had a return here
 }
 
 int is_full(list_node* position){
@@ -150,19 +148,32 @@ int is_full(list_node* position){
         size++;
     }
     size++;
-    return size;
+    if (size == L) {
+        return 1;
+    }
+    return 0;
 }
 
 void add_node(record_st* node, list_node* position) {
     //wil check if list is full
-    //is_full();
-};   //will receive node and location
-                //will check if current list is full
-                //incase not full will have to handle separation of next node
+    if (is_full(position) == 1) {
+
+        //complicou
+
+    }
+    else {
+        //n complicou tanto
+    }
+}  
+
+
+//will receive node and location
+//will check if current list is full
+//incase not full will have to handle separation of next node
 
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
 
     tree_node* root_arr = (tree_node*)calloc(5, sizeof(tree_node));
 
@@ -173,6 +184,7 @@ int main(int argc, char* argv[]) {
     while (output != NULL) {
         output = insert_node(read_line(argc, argv), root_arr);
     }
+    //print_results();
 
 
     return 0;
