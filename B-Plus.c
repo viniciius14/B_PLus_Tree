@@ -1,10 +1,9 @@
-
 #define _CRT_SECURE_NO_DEPRECATE //done so microsoft visual studio lets me use fscanf and fopen instead of fscanf_s and fopen_s respectively
 
 #define M 5//is for 
 #define L 5//might delete later //is for linked list size
 //possibilidade de fazer uma conta antes do define M e atribuir o resultado dessa conta ao M
-
+//codigo de teste
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -35,6 +34,14 @@ typedef struct record_st {
     char motivation[350];
 } record_st;
 
+typedef struct list_node {
+    struct list_node* next;
+    record_st* contents;
+
+    struct list_node* prev;//maybe not needed
+    int is_leaf; // if it stays it will always equal to 0
+}list_node;
+
 typedef struct tree_node {
     uint32_t id;
     struct tree_node* child;//will either have a child pointer or a list pointer equal to NULL
@@ -44,13 +51,7 @@ typedef struct tree_node {
     //record_st* information;//only if its a leaf node
 }tree_node;
 
-typedef struct list_node {
-    struct list_node* next;
-    record_st* contents;
 
-    struct list_node* prev;//maybe not needed is_leaf may be deleted too
-    int is_leaf; // if it stays it will always equal to 0
-}list_node;
 
 int char_to_num(char arr[]) {
     uint32_t num = 0;
@@ -96,12 +97,12 @@ record_st* read_line(int argc, char* argv[]) {
 }
 
 int* insert_node(record_st* node, tree_node arr[]) {
-    if (node == NULL) {//we are at the end of the file
-        return NULL;
+    if (node == NULL) { //we are at the end of the file
+        return NULL;    //how will the node equal NULL?
     }
     int idx;
     if ((&arr[0])->child == NULL) {//is leaf?
-
+        //checking last tree node, this will point to linked lists
         for (int i = 0; i != M; i++) {//iterate trough linked list with the ids of the actual information
             if (node->id < (&arr[i])->list->contents->id) {//if the nodes id wich we wanna insert is smaller then the i element of the list
                 idx = i - 1;
@@ -111,8 +112,6 @@ int* insert_node(record_st* node, tree_node arr[]) {
                 idx = i;//no break because it will be the last option either way
             }
         }
-
-
 
         list_node* position = (&arr)[idx]->list;
         for (; position->next != NULL; position = position->next) {
@@ -124,12 +123,10 @@ int* insert_node(record_st* node, tree_node arr[]) {
             }
         }
         //since we know the last node is the one we're searching for
-        position = position->next;
-        add_node(node, position);
-        return 1;
         //for last node elem
         //no need to check last elem cause we know it will be the one we want
-
+        position = position->next;
+        add_node(node,position);
 
     }
     else {
@@ -146,17 +143,22 @@ int* insert_node(record_st* node, tree_node arr[]) {
         insert_node(node, arr);
     }
 }
-                                                //will receive node and location
-                                                //will check if current list is full
-                                                //incase not full will have to handle separation of next node
 
-add_node(record_st* node, list_node* position) {
-    //check if current list is full
+int is_full(list_node* position){
+    int size = 0;
+    while(position->next != NULL){
+        size++;
+    }
+    size++;
+    return size;
+}
 
-            
-
-
-};   
+void add_node(record_st* node, list_node* position) {
+    //wil check if list is full
+    //is_full();
+};   //will receive node and location
+                //will check if current list is full
+                //incase not full will have to handle separation of next node
 
 
 
