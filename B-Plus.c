@@ -1,9 +1,10 @@
 #define _CRT_SECURE_NO_DEPRECATE //done so microsoft visual studio lets me use fscanf and fopen instead of fscanf_s and fopen_s respectively
+#define M 5//is for size of the tree arrays
+#define L 5//is for linked list size
+// L = 5 because 4KB / 708 B = 5.66, each block can store 5 records
+// M = 512  because block size = 4KB, id size = 4B, pointers = 4B,  4KB/(4B+4B) = 512
 
-#define M 5//is for 
-#define L 5//might delete later //is for linked list size
-//possibilidade de fazer uma conta antes do define M e atribuir o resultado dessa conta ao M
-//codigo de teste
+
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -12,10 +13,9 @@
 
 //All Warnings Syntax
 //gcc -Wall -Wextra -Wpedantic -ansi -std=c99 -g b_plus.c -o b_plus
+
 //.\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\teste.txt
 
-// L = 5 because 4KB / 708 B = 5.66, each block can store 5 records
-// M = 500  because block size = 4KB, id size = 4B, pointers = 4B,  4KB/(4B+4B) = 500
 
 
 typedef struct record_st {
