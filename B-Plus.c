@@ -1,4 +1,3 @@
-
 #define _CRT_SECURE_NO_DEPRECATE //done so microsoft visual studio lets me use fscanf and fopen instead of fscanf_s and fopen_s respectively
 
 #define M 5//is for 
@@ -35,6 +34,14 @@ typedef struct record_st {
     char motivation[350];
 } record_st;
 
+typedef struct list_node {
+    struct list_node* next;
+    record_st* contents;
+
+    struct list_node* prev;//maybe not needed
+    int is_leaf; // if it stays it will always equal to 0
+}list_node;
+
 typedef struct tree_node {
     uint32_t id;
     struct tree_node* child;//will either have a child pointer or a list pointer equal to NULL
@@ -44,13 +51,7 @@ typedef struct tree_node {
     //record_st* information;//only if its a leaf node
 }tree_node;
 
-typedef struct list_node {
-    struct list_node* next;
-    record_st* contents;
 
-    struct list_node* prev;//maybe not needed
-    int is_leaf; // if it stays it will always equal to 0
-}list_node;
 
 int char_to_num(char arr[]) {
     uint32_t num = 0;
