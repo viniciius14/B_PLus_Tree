@@ -97,12 +97,12 @@ record_st* read_line(int argc, char* argv[]) {
 }
 
 int* insert_node(record_st* node, tree_node arr[]) {
-    if (node == NULL) {//we are at the end of the file
-        return NULL;
+    if (node == NULL) { //we are at the end of the file
+        return NULL;    //how will the node equal NULL?
     }
     int idx;
     if ((&arr[0])->child == NULL) {//is leaf?
-
+        //checking last tree node, this will point to linked lists
         for (int i = 0; i != M; i++) {//iterate trough linked list with the ids of the actual information
             if (node->id < (&arr[i])->list->contents->id) {//if the nodes id wich we wanna insert is smaller then the i element of the list
                 idx = i - 1;
@@ -113,8 +113,6 @@ int* insert_node(record_st* node, tree_node arr[]) {
             }
         }
 
-
-
         list_node* position = (&arr)[idx]->list;
         for (; position->next != NULL; position = position->next) {
             if (node->id < position->next->contents->id){
@@ -122,13 +120,13 @@ int* insert_node(record_st* node, tree_node arr[]) {
                 //if true we know that current list node is the correct one
                 //else its gonna be the last
                 return 1;//anything different then NULL will work as a return value
-                }
+            }
         }
         //since we know the last node is the one we're searching for
-
         //for last node elem
         //no need to check last elem cause we know it will be the one we want
-
+        position = position->next;
+        add_node(node,position);
 
     }
     else {
@@ -146,7 +144,9 @@ int* insert_node(record_st* node, tree_node arr[]) {
     }
 }
 
-add_node(record_st* node, list_node* position) {};   //will receive node and location
+add_node(record_st* node, list_node* position) {
+    
+};   //will receive node and location
                 //will check if current list is full
                 //incase not full will have to handle separation of next node
 
