@@ -1,14 +1,17 @@
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+
+
 #define _CRT_SECURE_NO_DEPRECATE //done so microsoft visual studio lets me use fscanf and fopen instead of fscanf_s and fopen_s respectively
 #define M 5//is for size of the tree arrays
 #define L 5//is for linked list size
 // L = 5 because 4KB / 708 B = 5.66, each block can store 5 records
 // M = 512  because block size = 4KB, id size = 4B, pointers = 4B,  4KB/(4B+4B) = 512
 
+// M / 2 = index wich will get promoted
 
-#include <stdio.h>
-#include <stdint.h>
-#include <string.h>
-#include <stdlib.h>
 
 
 //All Warnings Syntax
@@ -16,6 +19,17 @@
 
 //.\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\nobel_prize_winners.csv
 
+
+
+
+
+//
+//Descend to the leaf where the key fits.
+//1 - If the node has an empty space, insert the key / reference pair into the node.
+//2 - If the node is already full, split it into two nodes, distributing the keys evenly between the two nodes.
+//      If the node is a leaf, take a copy of the minimum value in the second of these two nodesand repeat this insertion algorithm to insert it into the parent node.
+//      If the node is a non - leaf, exclude the middle value during the splitand repeat this insertion algorithm to insert this excluded value into the parent node.
+//
 
 typedef struct record_st {
     uint32_t id;
@@ -112,8 +126,8 @@ int* insert_node(record_st* node, tree_node arr[]) {
 
         list_node* position = (&arr)[idx]->list;
         for (; position->next != NULL; position = position->next) {
-            if (node->id < position->next->contents->id){
-                add_node(node,position);
+            if (node->id < position->next->contents->id) {
+                add_node(node, position);
                 //if true we know that current list node is the correct one
                 //else its gonna be the last
                 return 1;//anything different then NULL will work as a return value
@@ -123,7 +137,7 @@ int* insert_node(record_st* node, tree_node arr[]) {
         //for last node elem
         //no need to check last elem cause we know it will be the one we want
         position = position->next;
-        add_node(node,position);
+        add_node(node, position);
 
     }
     else {
@@ -142,9 +156,9 @@ int* insert_node(record_st* node, tree_node arr[]) {
     //gotta had a return here
 }
 
-int is_full(list_node* position){
+int is_full(list_node* position) {
     int size = 0;
-    while(position->next != NULL){
+    while (position->next != NULL) {
         size++;
     }
     size++;
@@ -164,7 +178,7 @@ void add_node(record_st* node, list_node* position) {
     else {
         //n complicou tanto
     }
-}  
+}
 
 
 //will receive node and location
