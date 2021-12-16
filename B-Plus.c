@@ -144,8 +144,18 @@ int* insert_node(record_st* node, tree_node arr[]) {
     }
 }
 
-add_node(record_st* node, list_node* position) {
-    
+int is_full(list_node* position){
+    int size = 0;
+    while(position->next != NULL){
+        size++;
+    }
+    size++;
+    return size;
+}
+
+void add_node(record_st* node, list_node* position) {
+    //wil check if list is full
+    //is_full();
 };   //will receive node and location
                 //will check if current list is full
                 //incase not full will have to handle separation of next node
