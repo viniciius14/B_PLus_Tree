@@ -49,13 +49,13 @@ typedef struct list_node {
     record_st* contents;
 
     struct list_node* prev;//maybe not needed
-    int is_leaf; // if it stays it will always equal to 0
+    uint32_t is_leaf; // if it stays it will always equal to 0
 }list_node;
 
 typedef struct tree_node {
     uint32_t id;
     struct tree_node* child;//will either have a child pointer or a list pointer equal to NULL
-    list_node* list;//will point to first element of the linked list
+    list_node* list;//will point  to first element of the linked list
     //struct tree_node* parent;//maybe not
     //struct tree_node* next;//WHATS IS NEXT??
     //record_st* information;//only if its a leaf node
@@ -63,7 +63,7 @@ typedef struct tree_node {
 
 
 
-int char_to_num(char arr[]) {
+uint32_t char_to_num(char arr[]) {
     uint32_t num = 0;
 
     for (uint32_t x = 0; arr[x] != '\0'; x++) {
@@ -73,7 +73,7 @@ int char_to_num(char arr[]) {
     return num;
 }
 
-record_st* read_line(int argc, char* argv[], FILE* fp) {
+record_st* read_line(uint32_t argc, char* argv[], FILE* fp) {
 
     if (argc != 2) {
         printf("You called to many or to few arguments!");
@@ -104,9 +104,9 @@ record_st* read_line(int argc, char* argv[], FILE* fp) {
     return node;
 }
 
-int is_full(list_node* list_position) {
+uint32_t is_full(list_node* list_position) {
     
-    int size = 0;
+    uint32_t size = 0;
     while (list_position->next != NULL) {
         size++;
     }
@@ -130,14 +130,14 @@ void add_node(record_st* node,list_node* list_position, list_node* node_position
 }
 
 
-int insert_node(record_st* node, tree_node arr[]) {
+uint32_t insert_node(record_st* node, tree_node arr[]) {
     if (node == NULL) { //we are at the end of the file
         return 0;    
     }
-    int idx;
+    uint32_t idx;
     if ((&arr[0])->child == NULL) {//is leaf?
-        //checking last tree node, this will point to linked lists
-        for (int i = 0; i != M; i++) {//iterate trough linked list with the ids of the actual information
+        //checking last tree node, this will point  to linked lists
+        for (uint32_t i = 0; i != M; i++) {//iterate trough linked list with the ids of the actual information
             if (node->id < (&arr[i])->list->contents->id) {//if the nodes id wich we wanna insert is smaller then the i element of the list
                 idx = i - 1;
                 break;
@@ -166,7 +166,7 @@ int insert_node(record_st* node, tree_node arr[]) {
 
     }
     else {
-        for (int i = 0; i != M; i++) {
+        for (uint32_t i = 0; i != M; i++) {
             if (node->id < (&arr[i])->id) {
                 idx = i - 1;
                 break;
@@ -192,7 +192,7 @@ int insert_node(record_st* node, tree_node arr[]) {
 
 
 
-int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
+uint32_t main(uint32_t argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
 
     tree_node* root_arr = (tree_node*)calloc(5, sizeof(tree_node));
     FILE* fp = fopen(argv[1], "r+");//may need change
@@ -200,7 +200,7 @@ int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organ
     //first fill the initial array and its leaf nodes
     //then complete the more complex mid tree arrays and leaf nodes
 
-    int output = -1;
+    uint32_t output = -1;
     while (output != 0) {
         output = insert_node(read_line(argc, argv, fp), root_arr);
     }
