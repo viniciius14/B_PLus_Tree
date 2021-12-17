@@ -73,17 +73,15 @@ int char_to_num(char arr[]) {
     return num;
 }
 
-record_st* read_line(int argc, char* argv[]) {
+record_st* read_line(int argc, char* argv[], FILE* fp) {
 
     if (argc != 2) {
         printf("You called to many or to few arguments!");
         return NULL;
     }
 
-    FILE* fp = fopen(argv[1], "r+");//may need change
-
     if (fp == NULL) {
-        printf("Error opening your file!");
+        printf("Error acessing your file!");
         return NULL;
     }
 
@@ -92,14 +90,16 @@ record_st* read_line(int argc, char* argv[]) {
     char* temp_year = (char*)calloc(10, sizeof(char));
     char* temp_share = (char*)calloc(10, sizeof(char));
 
-
-    if (fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, node->firstname, node->surname, node->birthdate, node->died, node->country, node->countryCode, node->city, node->gender, temp_year, node->category, temp_share, node->motivation) == 0) {
-        return NULL;//if fscanf returns 0 means we are at the end of the file
-    }
-    else {
-        node->id = char_to_num(temp_id);
-        node->year = char_to_num(temp_year);
-        node->share = char_to_num(temp_share);
+    if (node != NULL) {
+        if (fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, node->firstname, node->surname, node->birthdate, node->died, node->country, node->countryCode, node->city, node->gender, temp_year, node->category, temp_share, node->motivation) == 0) {
+            return NULL;//if fscanf returns 0 means we are at the end of the file
+        }
+        else {
+            node->id = char_to_num(temp_id);
+            node->year = char_to_num(temp_year);
+            node->share = char_to_num(temp_share);
+        }
+        return node;
     }
     return node;
 }
@@ -118,7 +118,7 @@ int is_full(list_node* position) {
 
 void add_node(record_st* node, list_node* position) {
     //wil check if list is full
-    if (is_full(position) == 1) {
+    if (is_full(position) == 1) {//1 for full 0 for any other state
 
         //complicou
 
@@ -131,7 +131,7 @@ void add_node(record_st* node, list_node* position) {
 
 int insert_node(record_st* node, tree_node arr[]) {
     if (node == NULL) { //we are at the end of the file
-        return 0;    //how will the node equal NULL?
+        return 0;    
     }
     int idx;
     if ((&arr[0])->child == NULL) {//is leaf?
@@ -176,6 +176,7 @@ int insert_node(record_st* node, tree_node arr[]) {
         insert_node(node, arr);
     }
     //gotta had a return here
+    return 0;   //doesnt actually do anything
 }
 
 
@@ -191,13 +192,14 @@ int insert_node(record_st* node, tree_node arr[]) {
 int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
 
     tree_node* root_arr = (tree_node*)calloc(5, sizeof(tree_node));
+    FILE* fp = fopen(argv[1], "r+");//may need change
 
     //first fill the initial array and its leaf nodes
     //then complete the more complex mid tree arrays and leaf nodes
 
     int output = -1;
     while (output != 0) {
-        output = insert_node(read_line(argc, argv), root_arr);
+        output = insert_node(read_line(argc, argv, fp), root_arr);
     }
     //print_results();
 
