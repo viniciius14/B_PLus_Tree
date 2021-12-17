@@ -4,7 +4,7 @@
 // L = 5 because 4KB / 708 B = 5.66, each block can store 5 records
 // M = 512  because block size = 4KB, id size = 4B, pointers = 4B,  4KB/(4B+4B) = 512
 
-// M / 2 = index wich will get promoted
+// M / 2 = index wich will get promoted   ---  5/2 = 2  --- nodes to the right will be heavier
 
 #include <stdio.h>
 #include <stdint.h>
@@ -104,9 +104,10 @@ record_st* read_line(int argc, char* argv[], FILE* fp) {
     return node;
 }
 
-int is_full(list_node* position) {
+int is_full(list_node* list_position) {
+    
     int size = 0;
-    while (position->next != NULL) {
+    while (list_position->next != NULL) {
         size++;
     }
     size++;
@@ -116,9 +117,9 @@ int is_full(list_node* position) {
     return 0;
 }
 
-void add_node(record_st* node, list_node* position) {
+void add_node(record_st* node,list_node* list_position, list_node* node_position) {
     //wil check if list is full
-    if (is_full(position) == 1) {//1 for full 0 for any other state
+    if (is_full(list_position) == 1) {//1 for full 0 for any other state
 
         //complicou
 
@@ -146,10 +147,12 @@ int insert_node(record_st* node, tree_node arr[]) {
             }
         }
 
-        list_node* position = (&arr)[idx]->list;
-        for (; position->next != NULL; position = position->next) {
-            if (node->id < position->next->contents->id) {
-                add_node(node, position);
+        list_node* list_position = (&arr)[idx]->list;//will indicate where list is in the tree
+        list_node* node_position = (&arr)[idx]->list;//will indicate where node will go in the list
+
+        for (; node_position->next != NULL; node_position = node_position->next) {
+            if (node->id < node_position->next->contents->id) {
+                add_node(node,list_position, node_position);
                 //if true we know that current list node is the correct one
                 //else its gonna be the last
                 return 1;//anything different then 0 will work as a return value
@@ -158,8 +161,8 @@ int insert_node(record_st* node, tree_node arr[]) {
         //since we know the last node is the one we're searching for
         //for last node elem
         //no need to check last elem cause we know it will be the one we want
-        position = position->next;
-        add_node(node, position);
+        node_position = node_position->next;
+        add_node(node,list_position, node_position);
 
     }
     else {
