@@ -14,7 +14,7 @@
 //All Warnings Syntax
 //gcc -Wall -Wextra -Wpedantic -ansi -std=c99 -g b_plus.c -o b_plus
 
-//.\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\nobel_prize_winners.csv
+//.\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\Prize_Winners.csv
 
 
 
@@ -69,7 +69,7 @@ uint32_t char_to_num(char arr[]) {
     for (uint32_t x = 0; arr[x] != '\0'; x++) {
         num = 10 * num + (arr[x] - '0');
     }
-
+    
     return num;
 }
 
@@ -105,8 +105,8 @@ record_st* read_line(uint32_t argc, char* argv[], FILE* fp) {
 }
 
 uint32_t is_full(list_node* list_position) {
-    
     uint32_t size = 0;
+
     while (list_position->next != NULL) {
         size++;
     }
@@ -125,7 +125,9 @@ void add_node(record_st* node,list_node* list_position, list_node* node_position
 
     }
     else {
+
         //n complicou tanto
+
     }
 }
 
@@ -193,9 +195,9 @@ uint32_t insert_node(record_st* node, tree_node arr[]) {
 
 
 uint32_t main(uint32_t argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
-
+    
     tree_node* root_arr = (tree_node*)calloc(5, sizeof(tree_node));
-    FILE* fp = fopen(argv[1], "r+");//may need change
+    FILE* fp = fopen(argv[1], "r+");
 
     //first fill the initial array and its leaf nodes
     //then complete the more complex mid tree arrays and leaf nodes
