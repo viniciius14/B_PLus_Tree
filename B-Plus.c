@@ -101,7 +101,7 @@ record_st* read_line(uint32_t argc, char* argv[], FILE* fp) {
         }
         return node;
     }
-    return node;
+    return node;//maybe return null?
 }
 
 uint32_t is_full(list_node* list_position) {
@@ -125,7 +125,7 @@ void add_node(record_st* node,list_node* list_position, list_node* node_position
 
     }
     else {
-
+        
         //n complicou tanto
 
     }
@@ -206,6 +206,7 @@ uint32_t main(uint32_t argc, char* argv[]) {  //fazer ficheiro de saida com os n
     while (output != 0) {
         output = insert_node(read_line(argc, argv, fp), root_arr);
     }
+
     //print_results();
 
 
