@@ -85,10 +85,10 @@ record_st* read_line(uint32_t argc, char* argv[], FILE* fp) {
         return NULL;
     }
 
-    record_st* node = (record_st*)calloc(1, sizeof(record_st));//using calloc so all values are initialized as 0
-    char* temp_id = (char*)calloc(10, sizeof(char));//max 10 digits
-    char* temp_year = (char*)calloc(10, sizeof(char));
-    char* temp_share = (char*)calloc(10, sizeof(char));
+    record_st* node  =  (record_st*)calloc(1, sizeof(record_st));//using calloc so all values are initialized as 0
+    char* temp_id    =  (char*)calloc(10, sizeof(char));//max 10 digits
+    char* temp_year  =  (char*)calloc(10, sizeof(char));
+    char* temp_share =  (char*)calloc(10, sizeof(char));
 
     if (node != NULL) {
         if (fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, node->firstname, node->surname, node->birthdate, node->died, node->country, node->countryCode, node->city, node->gender, temp_year, node->category, temp_share, node->motivation) == 0) {
