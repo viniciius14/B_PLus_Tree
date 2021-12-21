@@ -53,7 +53,7 @@ typedef struct tree_node {
 }tree_node;
 
 
-record_st* read_line(uint32_t argc, char* argv[], FILE* fp) {
+record_st* read_line(int argc, char* argv[], FILE* fp) {
 
     if (argc != 2) {
         printf("You called to many or to few arguments!");
@@ -91,22 +91,30 @@ int is_full(list_node* list_position) {
         return 1;
     }
     return 0;
-
 }  
 
 void add_node(record_st* node,list_node* list_position, list_node* node_position) {
     //wil check if list is full
     //first add node then reorganize
 
-    int full = is_full(list_position);
     
-    if (full == 0) {//0 means it still has space
-        node_position->contents = node;
-        node_position->prev = 
-    }
     
+    list_node* new_elem = (list_node*)calloc(1, sizeof(list_node));
 
-    
+    if (new_elem != NULL) {                //           1   2   3    4  new_ndoe  5->ndoe position
+
+        new_elem->contents = node;
+        new_elem->prev = node_position->prev;
+        new_elem->next = node_position;
+
+        int full = is_full(list_position);
+
+        if (full == 1) {//we will have to divide the list in 2 and then go to the parent and add a new one
+
+        }
+
+
+    }
 }
 
 
@@ -138,8 +146,8 @@ int insert_node(record_st* node, tree_node arr[]) {
                 return 1;//anything different then 0 will work as a return value
             }
         }
-
-        node_position = node_position->next;
+        //           1      2       3       4       5
+        node_position = node_position->next;//will equal NULL since its the last elem
         add_node(node,list_position, node_position);
 
     }
