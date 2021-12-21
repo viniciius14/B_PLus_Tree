@@ -62,17 +62,6 @@ typedef struct tree_node {
 }tree_node;
 
 
-
-uint32_t char_to_num(char arr[]) {
-    uint32_t num = 0;
-
-    for (uint32_t x = 0; arr[x] != '\0'; x++) {
-        num = 10 * num + (arr[x] - '0');
-    }
-    
-    return num;
-}
-
 record_st* read_line(uint32_t argc, char* argv[], FILE* fp) {
 
     if (argc != 2) {
@@ -85,23 +74,17 @@ record_st* read_line(uint32_t argc, char* argv[], FILE* fp) {
         return NULL;
     }
 
-    record_st* node  =  (record_st*)calloc(1, sizeof(record_st));//using calloc so all values are initialized as 0
-    char* temp_id    =  (char*)calloc(10, sizeof(char));//max 10 digits
-    char* temp_year  =  (char*)calloc(10, sizeof(char));
-    char* temp_share =  (char*)calloc(10, sizeof(char));
+    record_st* node  = (record_st*)calloc(1, sizeof(record_st));//using calloc so all values are initialized as 0
 
     if (node != NULL) {
-        if (fscanf(fp, " %[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^\n]", temp_id, node->firstname, node->surname, node->birthdate, node->died, node->country, node->countryCode, node->city, node->gender, temp_year, node->category, temp_share, node->motivation) == 0) {
+        if (fscanf(fp, " %d;%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%d;%[^\n]", &node->id, node->firstname, node->surname, node->birthdate, node->died, node->country, node->countryCode, node->city, node->gender, &node->year, node->category, &node->share, node->motivation) == 0) {
             return NULL;//if fscanf returns 0 means we are at the end of the file
         }
         else {
-            node->id = char_to_num(temp_id);
-            node->year = char_to_num(temp_year);
-            node->share = char_to_num(temp_share);
+            return node;
         }
-        return node;
     }
-    return node;//maybe return null?
+    return NULL;
 }
 
 uint32_t is_full(list_node* list_position) {
@@ -110,25 +93,30 @@ uint32_t is_full(list_node* list_position) {
     while (list_position->next != NULL) {
         size++;
     }
+
     size++;
-    if (size == L) {
+
+    if (size > L) {
         return 1;
     }
     return 0;
-}
+
+}  
 
 void add_node(record_st* node,list_node* list_position, list_node* node_position) {
     //wil check if list is full
-    if (is_full(list_position) == 1) {//1 for full 0 for any other state
+    //first add node then reorganize
+
+    uint32_t full = is_full(list_position);
+    if ( is_full == 1) {//1 for full 0 for any other state
 
         //complicou
 
     }
-    else {
-        
+            
         //n complicou tanto
 
-    }
+    
 }
 
 
