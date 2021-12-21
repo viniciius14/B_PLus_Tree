@@ -87,8 +87,8 @@ record_st* read_line(uint32_t argc, char* argv[], FILE* fp) {
     return NULL;
 }
 
-uint32_t is_full(list_node* list_position) {
-    uint32_t size = 0;
+int is_full(list_node* list_position) {
+    int size = 0;
 
     while (list_position->next != NULL) {
         size++;
@@ -107,27 +107,21 @@ void add_node(record_st* node,list_node* list_position, list_node* node_position
     //wil check if list is full
     //first add node then reorganize
 
-    uint32_t full = is_full(list_position);
-    if ( is_full == 1) {//1 for full 0 for any other state
-
-        //complicou
-
-    }
-            
-        //n complicou tanto
+    int full = is_full(list_position);
+    
 
     
 }
 
 
-uint32_t insert_node(record_st* node, tree_node arr[]) {
+int insert_node(record_st* node, tree_node arr[]) {
     if (node == NULL) { //we are at the end of the file
         return 0;    
     }
-    uint32_t idx;
+    int idx;
     if ((&arr[0])->child == NULL) {//is leaf?
         //checking last tree node, this will point  to linked lists
-        for (uint32_t i = 0; i != M; i++) {//iterate trough linked list with the ids of the actual information
+        for (int i = 0; i != M; i++) {//iterate trough linked list with the ids of the actual information
             if (node->id < (&arr[i])->list->contents->id) {//if the nodes id wich we wanna insert is smaller then the i element of the list
                 idx = i - 1;
                 break;
@@ -156,7 +150,7 @@ uint32_t insert_node(record_st* node, tree_node arr[]) {
 
     }
     else {
-        for (uint32_t i = 0; i != M; i++) {
+        for (int i = 0; i != M; i++) {
             if (node->id < (&arr[i])->id) {
                 idx = i - 1;
                 break;
@@ -182,7 +176,7 @@ uint32_t insert_node(record_st* node, tree_node arr[]) {
 
 
 
-uint32_t main(uint32_t argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
+int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
     
     tree_node* root_arr = (tree_node*)calloc(5, sizeof(tree_node));
     FILE* fp = fopen(argv[1], "r+");
@@ -190,7 +184,7 @@ uint32_t main(uint32_t argc, char* argv[]) {  //fazer ficheiro de saida com os n
     //first fill the initial array and its leaf nodes
     //then complete the more complex mid tree arrays and leaf nodes
 
-    uint32_t output = -1;
+    int output = -1;
     while (output != 0) {
         output = insert_node(read_line(argc, argv, fp), root_arr);
     }
