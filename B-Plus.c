@@ -3,7 +3,6 @@
 #define L 5//is for linked list size
 // L = 5 because 4KB / 708 B = 5.66, each block can store 5 records
 // M = 512  because block size = 4KB, id size = 4B, pointers = 4B,  4KB/(4B+4B) = 512
-
 // M / 2 = index wich will get promoted   ---  5/2 = 2  --- nodes to the right will be heavier
 
 #include <stdio.h>
@@ -13,12 +12,7 @@
 
 //All Warnings Syntax
 //gcc -Wall -Wextra -Wpedantic -ansi -std=c99 -g b_plus.c -o b_plus
-
 //.\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\Prize_Winners.csv
-
-
-
-
 
 //
 //Descend to the leaf where the key fits.
@@ -27,6 +21,7 @@
 //      If the node is a leaf, take a copy of the minimum value in the second of these two nodesand repeat this insertion algorithm to insert it into the parent node.
 //      If the node is a non - leaf, exclude the middle value during the splitand repeat this insertion algorithm to insert this excluded value into the parent node.
 //
+
 
 typedef struct record_st {
     uint32_t id;
@@ -47,18 +42,14 @@ typedef struct record_st {
 typedef struct list_node {
     struct list_node* next;
     record_st* contents;
-
-    struct list_node* prev;//maybe not needed
-    uint32_t is_leaf; // if it stays it will always equal to 0
+    struct list_node* prev;
 }list_node;
 
 typedef struct tree_node {
     uint32_t id;
-    struct tree_node* child;//will either have a child pointer or a list pointer equal to NULL
-    list_node* list;//will point  to first element of the linked list
-    //struct tree_node* parent;//maybe not
-    //struct tree_node* next;//WHATS IS NEXT??
-    //record_st* information;//only if its a leaf node
+    struct tree_node* child;
+    struct tree_node* parent;
+    list_node* list;
 }tree_node;
 
 
@@ -109,6 +100,11 @@ void add_node(record_st* node,list_node* list_position, list_node* node_position
 
     int full = is_full(list_position);
     
+    if (full == 0) {//0 means it still has space
+        node_position->contents = node;
+        node_position->prev = 
+    }
+    
 
     
 }
@@ -142,9 +138,7 @@ int insert_node(record_st* node, tree_node arr[]) {
                 return 1;//anything different then 0 will work as a return value
             }
         }
-        //since we know the last node is the one we're searching for
-        //for last node elem
-        //no need to check last elem cause we know it will be the one we want
+
         node_position = node_position->next;
         add_node(node,list_position, node_position);
 
