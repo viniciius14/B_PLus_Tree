@@ -94,11 +94,8 @@ int is_full(list_node* list_position) {
 }  
 
 void add_node(record_st* node,list_node* list_position, list_node* node_position) {
-    //wil check if list is full
     //first add node then reorganize
-
-    
-    
+        
     list_node* new_elem = (list_node*)calloc(1, sizeof(list_node));
 
     if (new_elem != NULL) {                //           1   2   3    4  new_ndoe  5->ndoe position
@@ -107,13 +104,14 @@ void add_node(record_st* node,list_node* list_position, list_node* node_position
         new_elem->prev = node_position->prev;
         new_elem->next = node_position;
 
+        node_position->prev->next = new_elem;
+        node_position->prev = new_elem;
+
         int full = is_full(list_position);
 
         if (full == 1) {//we will have to divide the list in 2 and then go to the parent and add a new one
-
+            //divide
         }
-
-
     }
 }
 
@@ -164,18 +162,8 @@ int insert_node(record_st* node, tree_node arr[]) {
         arr = (&arr[idx])->child;
         insert_node(node, arr);
     }
-    //gotta had a return here
     return 0;   //doesnt actually do anything
 }
-
-
-
-
-
-//will receive node and location
-//will check if current list is full
-//incase not full will have to handle separation of next node
-
 
 
 int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
@@ -192,7 +180,6 @@ int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organ
     }
 
     //print_results();
-
 
     return 0;
 }
