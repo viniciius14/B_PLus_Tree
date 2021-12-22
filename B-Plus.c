@@ -49,7 +49,9 @@ typedef struct tree_node {
     uint32_t id;//might delete    tree_node->list->contents->id
     struct tree_node* child;
     struct tree_node* parent;
+    struct tree_node* next;//will use to determine size
     list_node* list;
+    
 }tree_node;
 
 
@@ -78,7 +80,24 @@ record_st* read_line(int argc, char* argv[], FILE* fp) {
     return NULL;
 }
 
-int is_full(list_node* list_position) {
+int arr_full(tree_node arr[]) {
+    int size = 0;
+
+    for (int i = 0; i != M ; i++) {
+        if ((&arr)[i]->child != NULL || (&arr)[i]->list != NULL) {
+            size++;
+        }
+        else {
+            break;
+        }
+    }
+    if (size > M) {
+        return 1;
+    }
+    return 0;
+}
+
+int list_full(list_node* list_position) {
     int size = 0;
 
     while (list_position->next != NULL) {
@@ -111,6 +130,7 @@ void add_node(record_st* node, list_node* list_position, list_node* node_positio
 
         if (full == 1) {//we will have to divide the list in 2 and then go to the parent and add a new one
             //divide
+            
         }
     }
 }
