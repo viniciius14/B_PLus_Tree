@@ -46,7 +46,7 @@ typedef struct list_node {
 }list_node;
 
 typedef struct tree_node {
-    uint32_t id;
+    uint32_t id;//might delete    tree_node->list->contents->id
     struct tree_node* child;
     struct tree_node* parent;
     list_node* list;
