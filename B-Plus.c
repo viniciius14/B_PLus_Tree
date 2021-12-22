@@ -65,7 +65,7 @@ record_st* read_line(int argc, char* argv[], FILE* fp) {
         return NULL;
     }
 
-    record_st* node  = (record_st*)calloc(1, sizeof(record_st));//using calloc so all values are initialized as 0
+    record_st* node = (record_st*)calloc(1, sizeof(record_st));//using calloc so all values are initialized as 0
 
     if (node != NULL) {
         if (fscanf(fp, " %d;%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%d;%[^\n]", &node->id, node->firstname, node->surname, node->birthdate, node->died, node->country, node->countryCode, node->city, node->gender, &node->year, node->category, &node->share, node->motivation) == 0) {
@@ -91,11 +91,11 @@ int is_full(list_node* list_position) {
         return 1;
     }
     return 0;
-}  
+}
 
-void add_node(record_st* node,list_node* list_position, list_node* node_position) {
+void add_node(record_st* node, list_node* list_position, list_node* node_position) {
     //first add node then reorganize
-        
+
     list_node* new_elem = (list_node*)calloc(1, sizeof(list_node));
 
     if (new_elem != NULL) {                //           1   2   3    4  new_ndoe  5->ndoe position
@@ -118,7 +118,7 @@ void add_node(record_st* node,list_node* list_position, list_node* node_position
 
 int insert_node(record_st* node, tree_node arr[]) {
     if (node == NULL) { //we are at the end of the file
-        return 0;    
+        return 0;
     }
     int idx;
     if ((&arr[0])->child == NULL) {//is leaf?
@@ -138,7 +138,7 @@ int insert_node(record_st* node, tree_node arr[]) {
 
         for (; node_position->next != NULL; node_position = node_position->next) {
             if (node->id < node_position->next->contents->id) {
-                add_node(node,list_position, node_position);
+                add_node(node, list_position, node_position);
                 //if true we know that current list node is the correct one
                 //else its gonna be the last
                 return 1;//anything different then 0 will work as a return value
@@ -146,7 +146,7 @@ int insert_node(record_st* node, tree_node arr[]) {
         }
         //           1      2       3       4       5
         node_position = node_position->next;//will equal NULL since its the last elem
-        add_node(node,list_position, node_position);
+        add_node(node, list_position, node_position);
 
     }
     else {
@@ -167,7 +167,7 @@ int insert_node(record_st* node, tree_node arr[]) {
 
 
 int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
-    
+
     tree_node* root_arr = (tree_node*)calloc(5, sizeof(tree_node));
     FILE* fp = fopen(argv[1], "r+");
 
@@ -177,7 +177,7 @@ int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organ
     int output = -1;
     while (output != 0) {
         output = insert_node(read_line(argc, argv, fp), root_arr);
-       
+
     }
 
     //print_results();
