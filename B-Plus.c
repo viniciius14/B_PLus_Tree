@@ -177,6 +177,7 @@ int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organ
     int output = -1;
     while (output != 0) {
         output = insert_node(read_line(argc, argv, fp), root_arr);
+       
     }
 
     //print_results();
