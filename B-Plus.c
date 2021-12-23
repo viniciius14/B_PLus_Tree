@@ -46,10 +46,10 @@ typedef struct list_node {
 }list_node;
 
 typedef struct tree_node {
-    uint32_t id;//might delete    tree_node->list->contents->id
+    //uint32_t id;              //can be replaced with    tree_node->list->contents->id
     struct tree_node* child;
     struct tree_node* parent;
-    struct tree_node* next;//will use to determine size
+    struct tree_node* next;     //will use to determine size
     list_node* list;
     
 }tree_node;
@@ -67,11 +67,11 @@ record_st* read_line(int argc, char* argv[], FILE* fp) {
         return NULL;
     }
 
-    record_st* node = (record_st*)calloc(1, sizeof(record_st));//using calloc so all values are initialized as 0
+    record_st* node = (record_st*)calloc(1, sizeof(record_st));     //using calloc so all values are initialized as 0
 
     if (node != NULL) {
         if (fscanf(fp, " %d;%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%[^;];%d;%[^;];%d;%[^\n]", &node->id, node->firstname, node->surname, node->birthdate, node->died, node->country, node->countryCode, node->city, node->gender, &node->year, node->category, &node->share, node->motivation) == 0) {
-            return NULL;//if fscanf returns 0 means we are at the end of the file
+            return NULL;        //if fscanf returns 0 means we are at the end of the file
         }
         else {
             return node;
@@ -80,17 +80,14 @@ record_st* read_line(int argc, char* argv[], FILE* fp) {
     return NULL;
 }
 
-int arr_full(tree_node arr[]) {
+int arr_full(tree_node* arr) {
     int size = 0;
 
-    for (int i = 0; i != M ; i++) {
-        if ((&arr)[i]->child != NULL || (&arr)[i]->list != NULL) {
-            size++;
-        }
-        else {
-            break;
-        }
+    for ( ; arr->next != NULL; arr = arr->next) {
+        size++;
     }
+    size++;
+
     if (size > M) {
         return 1;
     }
