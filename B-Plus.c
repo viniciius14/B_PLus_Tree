@@ -39,11 +39,13 @@ typedef struct record_st {
     char motivation[350];
 } record_st;
 
+
+
 typedef struct list_node {
     struct list_node* next;
     record_st* contents;
     struct list_node* prev;
-    tree_node* parent;          //only the first elem of the linked list will have this
+    //tree_node* parent;          //only the first elem of the linked list will have this
 }list_node;
 
 typedef struct tree_node {
@@ -110,12 +112,32 @@ int list_full(list_node* list_position) {
     return 0;
 }
 
-void divide(list_node* list_position) {
-    tree_node* parent = list_position->parent
+void arr_divide() {}
+
+void list_divide(list_node* list_position, tree_node arr[]) {
+    tree_node* parent = (tree_node*)calloc(1, sizeof(tree_node));
+    if (parent == NULL) {
+        printf("Error allocating memory.");
+        return;
+    }
+    parent->list = list_position;//this is a new parent to the list not the actual one gotta fix this
+
+
+
+    list_node* split_list = list_position->next->next->next;      // 1   ->  2  ->   3   ->    4       5        6
+    split_list->prev = NULL;
+    //split_list->
+
+    list_position->next->next->next = NULL;
+
+    tree_node* moved_elem = parent->next;
+    parent->next->list = split_list;
+
+    parent->next->next = moved_elem;
 }
 
 
-void add_node(record_st* node, list_node* list_position, list_node* node_position) {
+void add_node(record_st* node, list_node* list_position, list_node* node_position, tree_node arr[]) {//node position can equal NULL
     //first add node then reorganize
 
     list_node* new_elem = (list_node*)calloc(1, sizeof(list_node));
@@ -135,7 +157,7 @@ void add_node(record_st* node, list_node* list_position, list_node* node_positio
             //divide
             //3 will stay in the current node 3 will go to the next available space
 
-            divide(list_position);
+            list_divide(list_position, arr);
 
 
 
@@ -168,7 +190,7 @@ int insert_node(record_st* node, tree_node arr[]) {
 
         for (; node_position->next != NULL; node_position = node_position->next) {
             if (node->id < node_position->next->contents->id) {
-                add_node(node, list_position, node_position);
+                add_node(node, list_position, node_position, arr);
                 //if true we know that current list node is the correct one
                 //else its gonna be the last
                 return 1;//anything different then 0 will work as a return value
@@ -176,7 +198,7 @@ int insert_node(record_st* node, tree_node arr[]) {
         }
         //           1      2       3       4       5
         node_position = node_position->next;//will equal NULL since its the last elem
-        add_node(node, list_position, node_position);
+        add_node(node, list_position, node_position, arr);
 
     }
     else {
