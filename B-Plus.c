@@ -43,6 +43,7 @@ typedef struct list_node {
     struct list_node* next;
     record_st* contents;
     struct list_node* prev;
+    tree_node* parent;          //only the first elem of the linked list will have this
 }list_node;
 
 typedef struct tree_node {
@@ -51,7 +52,7 @@ typedef struct tree_node {
     struct tree_node* parent;
     struct tree_node* next;     //will use to determine size
     list_node* list;
-    
+
 }tree_node;
 
 
@@ -83,7 +84,7 @@ record_st* read_line(int argc, char* argv[], FILE* fp) {
 int arr_full(tree_node* arr) {
     int size = 0;
 
-    for ( ; arr->next != NULL; arr = arr->next) {
+    for (; arr->next != NULL; arr = arr->next) {
         size++;
     }
     size++;
@@ -110,7 +111,7 @@ int list_full(list_node* list_position) {
 }
 
 void divide(list_node* list_position) {
-
+    tree_node* parent = list_position->parent
 }
 
 
@@ -128,7 +129,7 @@ void add_node(record_st* node, list_node* list_position, list_node* node_positio
         node_position->prev->next = new_elem;
         node_position->prev = new_elem;
 
-        
+
 
         if (list_full(list_position) == 1) {//we will have to divide the list in 2 and then go to the parent and add a new one
             //divide
