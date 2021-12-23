@@ -109,6 +109,11 @@ int list_full(list_node* list_position) {
     return 0;
 }
 
+void divide(list_node* list_position) {
+
+}
+
+
 void add_node(record_st* node, list_node* list_position, list_node* node_position) {
     //first add node then reorganize
 
@@ -123,12 +128,19 @@ void add_node(record_st* node, list_node* list_position, list_node* node_positio
         node_position->prev->next = new_elem;
         node_position->prev = new_elem;
 
-        int full = is_full(list_position);
+        
 
-        if (full == 1) {//we will have to divide the list in 2 and then go to the parent and add a new one
+        if (list_full(list_position) == 1) {//we will have to divide the list in 2 and then go to the parent and add a new one
             //divide
-            
+            //3 will stay in the current node 3 will go to the next available space
+
+            divide(list_position);
+
+
+
         }
+
+
     }
 }
 
@@ -168,7 +180,7 @@ int insert_node(record_st* node, tree_node arr[]) {
     }
     else {
         for (int i = 0; i != M; i++) {
-            if (node->id < (&arr[i])->id) {
+            if (node->id < (&arr[i])->list->contents->id) {
                 idx = i - 1;
                 break;
             }
