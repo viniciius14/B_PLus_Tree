@@ -259,7 +259,7 @@ int insert_node(record_st* node, tree_node* arr) {
 
 int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
 
-    tree_node* root_arr = (tree_node*)calloc(M, sizeof(tree_node));
+    tree_node* root_arr = (tree_node*)calloc(M, sizeof(tree_node));//might have to be M+1 cause we will add an extra element from time to time
     FILE* fp = fopen(argv[1], "r+");
 
     //first fill the initial array and its leaf nodes
