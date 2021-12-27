@@ -80,6 +80,7 @@ record_st* read_line(int argc, char* argv[], FILE* fp) {
             return node;
         }
     }
+    printf("Error allocating memory.");
     return NULL;
 }
 
@@ -112,7 +113,7 @@ int list_full(list_node* list_position) {
     return 0;
 }
 
-void arr_divide(tree_node* arr) {
+void arr_divide(tree_node* arr) {//, tree_node* parent
     //max size of arr = 5 (idx = 4)
     //if we have to split, arr = 6, idx of division = 2
     //size of arr / 2  - 1 = idx of division
@@ -120,23 +121,31 @@ void arr_divide(tree_node* arr) {
 
     int idx = ((M + 1) / 2) - 1;//it will be the next one after the parent DUMBASS
     
-    tree_node* new_arr = (tree_node*)calloc(3, sizeof(tree_node));
+    tree_node* new_arr = (tree_node*)calloc(M, sizeof(tree_node));
     if (new_arr == NULL) {
-        printf("Error allocating memory");
+        printf("Error allocating memory.");
     }
     
     for (int i = idx; i != M; i++) {
-        
+        //maybe delete
     }
 
-    (&arr)[idx - 1]->next = NULL;
+    (&arr)[idx]->next = NULL;
+    (&new_arr)[idx]->next = NULL;
 
-    arr->parent->next = new_arr;
 
+
+    if (arr->parent == NULL) {
+        tree_node* new_parent = (tree_node*)calloc(M, sizeof(tree_node));
+    }
+    //new_arr = arr->parent->next->child;
+
+
+    
 
 }
 
-void list_divide(list_node* list_position, tree_node arr[]) {
+void list_divide(list_node* list_position, tree_node* arr) {//needs revision
     tree_node* parent = (tree_node*)calloc(1, sizeof(tree_node));
     if (parent == NULL) {
         printf("Error allocating memory.");
@@ -156,6 +165,13 @@ void list_divide(list_node* list_position, tree_node arr[]) {
     parent->next->list = split_list;
 
     parent->next->next = moved_elem;
+    
+
+    //divide the arr if its full
+    if (arr_full(arr) == 1) {
+        arr_divide(arr);
+    }
+    return;
 }
 
 
@@ -187,10 +203,11 @@ void add_node(record_st* node, list_node* list_position, list_node* node_positio
 
 
     }
+    return;
 }
 
 
-int insert_node(record_st* node, tree_node arr[]) {
+int insert_node(record_st* node, tree_node* arr) {
     if (node == NULL) { //we are at the end of the file
         return 0;
     }
@@ -242,7 +259,7 @@ int insert_node(record_st* node, tree_node arr[]) {
 
 int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
 
-    tree_node* root_arr = (tree_node*)calloc(5, sizeof(tree_node));
+    tree_node* root_arr = (tree_node*)calloc(M, sizeof(tree_node));
     FILE* fp = fopen(argv[1], "r+");
 
     //first fill the initial array and its leaf nodes
