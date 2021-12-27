@@ -112,7 +112,29 @@ int list_full(list_node* list_position) {
     return 0;
 }
 
-void arr_divide() {}
+void arr_divide(tree_node* arr) {
+    //max size of arr = 5 (idx = 4)
+    //if we have to split, arr = 6, idx of division = 2
+    //size of arr / 2  - 1 = idx of division
+    //size of arr = M + 1
+
+    int idx = ((M + 1) / 2) - 1;//it will be the next one after the parent DUMBASS
+    
+    tree_node* new_arr = (tree_node*)calloc(3, sizeof(tree_node));
+    if (new_arr == NULL) {
+        printf("Error allocating memory");
+    }
+    
+    for (int i = idx; i != M; i++) {
+        
+    }
+
+    (&arr)[idx - 1]->next = NULL;
+
+    arr->parent->next = new_arr;
+
+
+}
 
 void list_divide(list_node* list_position, tree_node arr[]) {
     tree_node* parent = (tree_node*)calloc(1, sizeof(tree_node));
