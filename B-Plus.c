@@ -121,7 +121,7 @@ void arr_divide(tree_node* arr) {//, tree_node* parent
     //size of arr = M + 1
 
     int idx = ((M + 1) / 2) - 1;//it will be the next one after the parent DUMBASS
-    
+
     tree_node* new_arr = (tree_node*)calloc(M, sizeof(tree_node));//change to M+1
     if (new_arr == NULL) {
         printf("Error allocating memory.");
@@ -131,20 +131,18 @@ void arr_divide(tree_node* arr) {//, tree_node* parent
     (&arr)[idx]->next = NULL;
     (&new_arr)[idx]->next = NULL;
 
-
-
     if (arr->parent == NULL) {
         tree_node* new_parent = (tree_node*)calloc(M, sizeof(tree_node));//change to M+1
         if (new_parent == NULL) {
             printf("Error allocating memory.");
-            return NULL;//return NULL or just return?
+            return;//return NULL or just return?
         }
         arr->parent = (&new_parent)[0];
         new_arr->parent = (&new_parent)[1];
 
     }
     else {
-        if (arr->parent->next == NULL) {//still have to account for when this list itself is full
+        if (arr->parent->next != NULL) {//still have to account for when this list itself is full
             arr->parent->next->child = new_arr;
             new_arr->parent = arr->parent->next;
             new_arr->parent->next = NULL;
@@ -155,19 +153,12 @@ void arr_divide(tree_node* arr) {//, tree_node* parent
             //    printf("Error creating variable.");
             //    return;
             //}
-
             next_node = arr->parent->next;
             arr->parent->next = new_arr;
             new_arr->next = next_node;
         }
     }
-
-
     //new_arr = arr->parent->next->child;
-
-
-    
-
 }
 
 void list_divide(list_node* list_position, tree_node* arr) {//needs revision
@@ -190,7 +181,7 @@ void list_divide(list_node* list_position, tree_node* arr) {//needs revision
     parent->next->list = split_list;
 
     parent->next->next = moved_elem;
-    
+
 
     //divide the arr if its full
     if (arr_full(arr) == 1) {
