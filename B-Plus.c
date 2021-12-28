@@ -3,7 +3,7 @@
 #define L 5//is for linked list size
 // L = 5 because 4KB / 708 B = 5.66, each block can store 5 records
 // M = 512  because block size = 4KB, id size = 4B, pointers = 4B,  4KB/(4B+4B) = 512
-// M / 2 = index wich will get promoted   ---  5/2 = 2  --- nodes to the right will be heavier
+
 
 #include <stdio.h>
 #include <stdint.h>
@@ -11,8 +11,9 @@
 #include <stdlib.h>
 
 //All Warnings Syntax
-//gcc -Wall -Wextra -Wpedantic -ansi -std=c99 -g b_plus.c -o b_plus
-//.\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\Prize_Winners.csv
+// gcc -Wall -Wextra -Wpedantic -ansi -std=c99 -g b_plus.c -o b_plus
+//csv file location
+// .\b_plus.exe C:\\Users\\Rodrigo\\Documents\\GitHub\\B_Plus_Tree\\Prize_Winners.csv
 
 //
 //Descend to the leaf where the key fits.
@@ -121,13 +122,10 @@ void arr_divide(tree_node* arr) {//, tree_node* parent
 
     int idx = ((M + 1) / 2) - 1;//it will be the next one after the parent DUMBASS
     
-    tree_node* new_arr = (tree_node*)calloc(M, sizeof(tree_node));
+    tree_node* new_arr = (tree_node*)calloc(M, sizeof(tree_node));//change to M+1
     if (new_arr == NULL) {
         printf("Error allocating memory.");
-    }
-    
-    for (int i = idx; i != M; i++) {
-        //maybe delete
+        return;//return NULL or just return?
     }
 
     (&arr)[idx]->next = NULL;
@@ -136,8 +134,35 @@ void arr_divide(tree_node* arr) {//, tree_node* parent
 
 
     if (arr->parent == NULL) {
-        tree_node* new_parent = (tree_node*)calloc(M, sizeof(tree_node));
+        tree_node* new_parent = (tree_node*)calloc(M, sizeof(tree_node));//change to M+1
+        if (new_parent == NULL) {
+            printf("Error allocating memory.");
+            return NULL;//return NULL or just return?
+        }
+        arr->parent = (&new_parent)[0];
+        new_arr->parent = (&new_parent)[1];
+
     }
+    else {
+        if (arr->parent->next == NULL) {//still have to account for when this list itself is full
+            arr->parent->next->child = new_arr;
+            new_arr->parent = arr->parent->next;
+            new_arr->parent->next = NULL;
+        }
+        else {
+            tree_node* next_node;
+            //if (next_node == NULL) {//to delete?
+            //    printf("Error creating variable.");
+            //    return;
+            //}
+
+            next_node = arr->parent->next;
+            arr->parent->next = new_arr;
+            new_arr->next = next_node;
+        }
+    }
+
+
     //new_arr = arr->parent->next->child;
 
 
@@ -177,7 +202,6 @@ void list_divide(list_node* list_position, tree_node* arr) {//needs revision
 
 void add_node(record_st* node, list_node* list_position, list_node* node_position, tree_node arr[]) {//node position can equal NULL
     //first add node then reorganize
-
     list_node* new_elem = (list_node*)calloc(1, sizeof(list_node));
 
     if (new_elem != NULL) {                //           1   2   3    4  new_ndoe  5->ndoe position
@@ -196,12 +220,8 @@ void add_node(record_st* node, list_node* list_position, list_node* node_positio
             //3 will stay in the current node 3 will go to the next available space
 
             list_divide(list_position, arr);
-
-
-
         }
-
-
+        return;
     }
     return;
 }
@@ -238,7 +258,6 @@ int insert_node(record_st* node, tree_node* arr) {
         //           1      2       3       4       5
         node_position = node_position->next;//will equal NULL since its the last elem
         add_node(node, list_position, node_position, arr);
-
     }
     else {
         for (int i = 0; i != M; i++) {
