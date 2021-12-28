@@ -131,7 +131,7 @@ void arr_divide(tree_node* arr) {//, tree_node* parent
     (&arr)[idx]->next = NULL;
     (&new_arr)[idx]->next = NULL;
 
-    if (arr->parent == NULL) {//if theres no parent ie its the root arr
+    if (arr->parent == NULL) {//if theres no parent i.e. its the root arr
         tree_node* new_parent = (tree_node*)calloc(M, sizeof(tree_node));//change to M+1
         if (new_parent == NULL) {
             printf("Error allocating memory.");
@@ -158,26 +158,35 @@ void arr_divide(tree_node* arr) {//, tree_node* parent
             arr->parent->next = new_arr;
             new_arr->next = next_node;
         }
+        if (arr_full(arr->parent) == 1) {
+            arr_divide(arr->parent);
+        }
     }
-    //new_arr = arr->parent->next->child;
     return;
 }
 
 void list_divide(list_node* list_position, tree_node* arr) {//needs revision
     tree_node* parent = (tree_node*)calloc(1, sizeof(tree_node));
+
     if (parent == NULL) {
         printf("Error allocating memory.");
         return;
     }
+
     parent->list = list_position;//this is a new parent to the list not the actual one gotta fix this
 
+    list_node* split_list = list_position;
+    //list_node* split_list = list_position->next->next->next;      // 1   ->  2  ->   3   ->    4       5        6
 
+    for (int i = 0; i != ((L + 1) / 2); i++) {
+        split_list = split_list->next;
+    }
 
-    list_node* split_list = list_position->next->next->next;      // 1   ->  2  ->   3   ->    4       5        6
     split_list->prev = NULL;
     //split_list->
 
-    list_position->next->next->next = NULL;
+    
+    (&list_position)[(L+1)/2 - 1] = NULL;
 
     tree_node* moved_elem = parent->next;
     parent->next->list = split_list;
