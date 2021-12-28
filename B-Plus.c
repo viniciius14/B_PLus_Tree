@@ -131,7 +131,7 @@ void arr_divide(tree_node* arr) {//, tree_node* parent
     (&arr)[idx]->next = NULL;
     (&new_arr)[idx]->next = NULL;
 
-    if (arr->parent == NULL) {
+    if (arr->parent == NULL) {//if theres no parent ie its the root arr
         tree_node* new_parent = (tree_node*)calloc(M, sizeof(tree_node));//change to M+1
         if (new_parent == NULL) {
             printf("Error allocating memory.");
@@ -141,24 +141,26 @@ void arr_divide(tree_node* arr) {//, tree_node* parent
         new_arr->parent = (&new_parent)[1];
 
     }
-    else {
+    else {//if its not the root arr
+        tree_node* next_node = (tree_node*)calloc(1, sizeof(tree_node));
+        if (next_node == NULL) {
+            printf("Error allocating memory.");
+            return;
+        }
         if (arr->parent->next != NULL) {//still have to account for when this list itself is full
+            arr->parent->next = next_node;
             arr->parent->next->child = new_arr;
             new_arr->parent = arr->parent->next;
-            new_arr->parent->next = NULL;
+            new_arr->parent->next = next_node;
         }
-        else {
-            tree_node* next_node;
-            //if (next_node == NULL) {//to delete?
-            //    printf("Error creating variable.");
-            //    return;
-            //}
+        else {//arr->parent->next == NULL
             next_node = arr->parent->next;
             arr->parent->next = new_arr;
             new_arr->next = next_node;
         }
     }
     //new_arr = arr->parent->next->child;
+    return;
 }
 
 void list_divide(list_node* list_position, tree_node* arr) {//needs revision
@@ -209,7 +211,6 @@ void add_node(record_st* node, list_node* list_position, list_node* node_positio
         if (list_full(list_position) == 1) {//we will have to divide the list in 2 and then go to the parent and add a new one
             //divide
             //3 will stay in the current node 3 will go to the next available space
-
             list_divide(list_position, arr);
         }
         return;
@@ -249,6 +250,7 @@ int insert_node(record_st* node, tree_node* arr) {
         //           1      2       3       4       5
         node_position = node_position->next;//will equal NULL since its the last elem
         add_node(node, list_position, node_position, arr);
+        return; // something
     }
     else {
         for (int i = 0; i != M; i++) {
@@ -278,7 +280,6 @@ int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organ
     int output = -1;
     while (output != 0) {
         output = insert_node(read_line(argc, argv, fp), root_arr);
-
     }
 
     //print_results();
