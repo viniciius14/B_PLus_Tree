@@ -229,35 +229,47 @@ void add_node(record_st* node, list_node* list_position, list_node* node_positio
 }
 
 
-int insert_node(record_st* node, tree_node* arr, list_node* list) {
+int insert_node(record_st* node, tree_node* arr, list_node* list, int elems_in_arr) {
     if (node == NULL) { //we are at the end of the file
         return 0;
     }
     //check how many array ahs so we can add the first few
-
-    int elems_in_arr = 0;
     //tree_node* pt = (&arr)[0]; pt->next != NULL; pt = pt->next
 
-    for (tree_node* pt = arr; pt->child != NULL && pt->list != NULL; pt->next = pt) {//might need extra revision
-        elems_in_arr++;
-    }
+    //tree_node* arr_pt = arr;
 
-
-    if (elems_in_arr == 0) {
+    //arr->list = list;
+    if (elems_in_arr == 0 ) {//start the first 2 manually
         printf("First element added.\n");
-        (&arr)[0]->list = list;
-        (&arr)[0]->list->contents = node;
-        (&arr)[0]->child = NULL;
-        (&arr)[0]->next = NULL;
-        (&arr)[0]->parent = NULL;
+        
+        arr->list->contents = node;
+        arr->list->next = NULL;
+        arr->list->prev = NULL;
         return 1;
+    }
+    if (elems_in_arr == 1) {
+        if (node->id > arr->list->contents->id) {//if node is bigger then 1st elem
+            arr = arr->next;
+            arr->list = list;
+            list->contents = node;
+        }
+        else {
+            arr->next->list->contents = arr->list->contents;
+            arr->list->contents = node;
+        }
     }
     else {
         int idx;
 
-        if ((&arr[0])->child == NULL) {//is leaf?
+        if (arr->child == NULL) {//is leaf?
             printf("Found leaf.\n");
             //checking last tree node, this will point  to linked lists
+
+
+
+
+
+
             for (int i = 0; i != M; i++) {//iterate trough linked list with the ids of the actual information
                 if ((&arr)[i]->list->contents->id != NULL) {
                     if (node->id < (&arr[i])->list->contents->id) {//if the nodes id wich we wanna insert is smaller then the i element of the list
@@ -301,16 +313,20 @@ int insert_node(record_st* node, tree_node* arr, list_node* list) {
                 }
             }
             arr = (&arr[idx])->child;
-            insert_node(node, arr, list);
+            insert_node(node, arr, list, elems_in_arr);
             return 1;
         }
     }
-    return 0;
+    //return 0;
 }
 
-tree_node* create_root_arr() {
+tree_node* create_root_arr() {//ta feito
     tree_node* last_node = (tree_node*)calloc(1, sizeof(tree_node));//do the foor loop backwards so we can say next  = last node and current = last node
     tree_node* root_pt = (tree_node*)calloc(1, sizeof(tree_node));
+
+    
+    list_node* last_list_node = (tree_node*)calloc(1, sizeof(tree_node));
+
     if (last_node == NULL || root_pt == NULL) {
         printf("Error allocating memory.");
         return 0;
@@ -319,24 +335,35 @@ tree_node* create_root_arr() {
     //tree_node* root_arr = (tree_node*)calloc(1, sizeof(tree_node));
     for (int i = M - 1; i != -1; i--) {
         tree_node* root_arr = (tree_node*)calloc(1, sizeof(tree_node));
-        if (root_arr == NULL) {
+        list_node* root_list = (list_node*)calloc(1, sizeof(list_node));
+        if (root_arr == NULL || root_list == NULL) {
             printf("Error allocating memory.");
             return 0;
         }
 
-
-
         root_arr->parent = NULL;
         root_arr->child = NULL;
-        root_arr->list = NULL;
+
+        
+
         if (i == M - 1) {
             root_arr->next = NULL;
         }
         else {
             root_arr->next = last_node;
         }
+
+        for (int j = L - 1; j != -1; j--) {
+            root_arr->list = root_list;
+            root_arr->list->contents = NULL;
+            root_arr->list->next = NULL;
+            root_arr->list->prev = NULL;
+        }
+
         last_node = root_arr;
         root_pt = root_arr;
+
+        
     }
 
     return root_pt;
@@ -354,11 +381,12 @@ int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organ
     //then complete the more complex mid tree arrays and leaf nodes
 
 
-
+    int elems_in_arr = 0;
 
     int output = -1;
     while (output != 0) {
-        output = insert_node (read_line(argc, argv, fp), create_root_arr(), root_list);
+        output = insert_node (read_line(argc, argv, fp), create_root_arr(), root_list, elems_in_arr);
+        elems_in_arr++;
     }
 
     //print_results(); //os primeiros 24 e o root
