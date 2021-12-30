@@ -78,6 +78,7 @@ record_st* read_line(int argc, char* argv[], FILE* fp) {
             return NULL;        //if fscanf returns 0 means we are at the end of the file
         }
         else {
+            printf("Read node with id = %d.\n", node->id);
             return node;
         }
     }
@@ -185,8 +186,8 @@ void list_divide(list_node* list_position, tree_node* arr) {//needs revision
     split_list->prev = NULL;
     //split_list->
 
-    
-    (&list_position)[(L+1)/2 - 1] = NULL;
+
+    (&list_position)[((L + 1) / 2) - 1]->next = NULL;//6/2  3  -  1    2 idx = 2 so 3 elem                          1   2   3   4   5   6
 
     tree_node* moved_elem = parent->next;
     parent->next->list = split_list;
@@ -228,59 +229,90 @@ void add_node(record_st* node, list_node* list_position, list_node* node_positio
 }
 
 
-int insert_node(record_st* node, tree_node* arr) {
+int insert_node(record_st* node, tree_node* arr, list_node* list) {
     if (node == NULL) { //we are at the end of the file
         return 0;
     }
-    int idx;
-    if ((&arr[0])->child == NULL) {//is leaf?
-        //checking last tree node, this will point  to linked lists
-        for (int i = 0; i != M; i++) {//iterate trough linked list with the ids of the actual information
-            if (node->id < (&arr[i])->list->contents->id) {//if the nodes id wich we wanna insert is smaller then the i element of the list
-                idx = i - 1;
-                break;
-            }
-            else {
-                idx = i;//no break because it will be the last option either way
-            }
-        }
+    //check how many array ahs so we can add the first few
 
-        list_node* list_position = (&arr)[idx]->list;//will indicate where list is in the tree
-        list_node* node_position = (&arr)[idx]->list;//will indicate where node will go in the list
-
-        for (; node_position->next != NULL; node_position = node_position->next) {
-            if (node->id < node_position->next->contents->id) {
-                add_node(node, list_position, node_position, arr);
-                //if true we know that current list node is the correct one
-                //else its gonna be the last
-                return 1;//anything different then 0 will work as a return value
-            }
+    int elems_in_arr = 1;
+    //tree_node* pt = (&arr)[0]; pt->next != NULL; pt = pt->next
+    for (int i = 0; i != L; i++) {
+        if ((&arr)[i]->list->contents != NULL) {
+            elems_in_arr++;
         }
-        //           1      2       3       4       5
-        node_position = node_position->next;//will equal NULL since its the last elem
-        add_node(node, list_position, node_position, arr);
-        return; // something
+    }
+
+    if (elems_in_arr == 0) {
+        printf("First element added.");
+        (&arr)[0]->list = list;
+        (&arr)[0]->list->contents = node;
+        (&arr)[0]->child = NULL;
+        (&arr)[0]->next = NULL;
+        (&arr)[0]->parent = NULL;
+        return 1;
     }
     else {
-        for (int i = 0; i != M; i++) {
-            if (node->id < (&arr[i])->list->contents->id) {
-                idx = i - 1;
-                break;
+        int idx;
+
+        if ((&arr[0])->child == NULL) {//is leaf?
+            printf("Found leaf.\n");
+            //checking last tree node, this will point  to linked lists
+            for (int i = 0; i != M; i++) {//iterate trough linked list with the ids of the actual information
+                if ((&arr)[i]->list->contents->id != NULL) {
+                    if (node->id < (&arr[i])->list->contents->id) {//if the nodes id wich we wanna insert is smaller then the i element of the list
+                        idx = i - 1;
+                        break;
+                    }
+                    else {
+                        idx = i;//no break because it will be the last option either way
+                    }
+                }
+                else {
+                    idx = i;
+                }
             }
-            else {
-                idx = i;
+
+            list_node* list_position = (&arr)[idx]->list;//will indicate where list is in the tree
+            list_node* node_position = (&arr)[idx]->list;//will indicate where node will go in the list
+
+            for (; node_position->next != NULL; node_position = node_position->next) {
+                if (node->id < node_position->next->contents->id) {
+                    add_node(node, list_position, node_position, arr);
+                    //if true we know that current list node is the correct one
+                    //else its gonna be the last
+                    return 1;//anything different then 0 will work as a return value
+                }
             }
+            //           1      2       3       4       5
+            node_position = node_position->next;//will equal NULL since its the last elem
+            add_node(node, list_position, node_position, arr);
+            return 1;
         }
-        arr = (&arr[idx])->child;
-        insert_node(node, arr);
+        else {
+            printf("Didn't find leaf node\n");
+            for (int i = 0; i != M; i++) {
+                if (node->id < (&arr[i])->list->contents->id) {
+                    idx = i - 1;
+                    break;
+                }
+                else {
+                    idx = i;
+                }
+            }
+            arr = (&arr[idx])->child;
+            insert_node(node, arr, list);
+            return 1;
+        }
     }
-    return 0;   //doesnt actually do anything
+    return 0;
 }
 
 
 int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
 
     tree_node* root_arr = (tree_node*)calloc(M, sizeof(tree_node));//might have to be M+1 cause we will add an extra element from time to time
+    list_node* root_list = (list_node*)calloc(L, sizeof(list_node));//might have to be L + 1
     FILE* fp = fopen(argv[1], "r+");
 
     //first fill the initial array and its leaf nodes
@@ -288,7 +320,7 @@ int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organ
 
     int output = -1;
     while (output != 0) {
-        output = insert_node(read_line(argc, argv, fp), root_arr);
+        output = insert_node(read_line(argc, argv, fp), root_arr, root_list);
     }
 
     //print_results();
