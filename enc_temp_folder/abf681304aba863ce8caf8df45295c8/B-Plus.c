@@ -325,10 +325,9 @@ tree_node* create_root_arr() {//ta feito
     tree_node* root_pt = (tree_node*)calloc(1, sizeof(tree_node));
 
     
-    list_node* next_list_node = (tree_node*)calloc(1, sizeof(tree_node));
-    list_node* prev_list_node = (tree_node*)calloc(1, sizeof(tree_node));
+    list_node* last_list_node = (tree_node*)calloc(1, sizeof(tree_node));
 
-    if (last_node == NULL || root_pt == NULL || next_list_node == NULL || prev_list_node == NULL) {
+    if (last_node == NULL || root_pt == NULL) {
         printf("Error allocating memory.");
         return 0;
     }
@@ -362,16 +361,12 @@ tree_node* create_root_arr() {//ta feito
 
             if (j == L - 1) {
                 root_arr->list->next = NULL;
-                
-            }
-            if (j == 0) {
-                root_arr->list->prev == NULL;
             }
             else {
-                root_arr->list->next = next_list_node;
+                root_arr->list->next = last_list_node;
             }
-            next_list_node = root_arr->list;
-            prev_list_node = root_arr->list;
+            last_list_node = root_arr->list;
+
         }
 
         last_node = root_arr;
