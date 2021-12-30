@@ -308,40 +308,57 @@ int insert_node(record_st* node, tree_node* arr, list_node* list) {
     return 0;
 }
 
-
-int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
-
-    //tree_node* root_arr = (tree_node*)calloc(M, sizeof(tree_node));//might have to be M+1 cause we will add an extra element from time to time
-    tree_node* root_arr[5] ={0};
-    list_node* root_list = (list_node*)calloc(L, sizeof(list_node));//might have to be L + 1    FILE* fp = fopen(argv[1], "r+");
-
-    //first fill the initial array and its leaf nodes
-    //then complete the more complex mid tree arrays and leaf nodes
-
+tree_node* create_root_arr() {
     tree_node* last_node = (tree_node*)calloc(1, sizeof(tree_node));//do the foor loop backwards so we can say next  = last node and current = last node
-    if (last_node == NULL) {
+    tree_node* root_pt = (tree_node*)calloc(1, sizeof(tree_node));
+    if (last_node == NULL || root_pt == NULL) {
         printf("Error allocating memory.");
         return 0;
     }
 
-    for (int i = M; i != 0; i--) {
-        root_arr[i]->parent = NULL;
-        root_arr[i]->child = NULL;
-        root_arr[i]->list = NULL;
-        if (i == M) {
-            root_arr[i]->next = NULL;
-        }
-        else {
-            root_arr[i]->next = last_node;
+    //tree_node* root_arr = (tree_node*)calloc(1, sizeof(tree_node));
+    for (int i = M - 1; i != -1; i--) {
+        tree_node* root_arr = (tree_node*)calloc(1, sizeof(tree_node));
+        if (root_arr == NULL) {
+            printf("Error allocating memory.");
+            return 0;
         }
 
-        last_node = root_arr[i];
+
+
+        root_arr->parent = NULL;
+        root_arr->child = NULL;
+        root_arr->list = NULL;
+        if (i == M - 1) {
+            root_arr->next = NULL;
+        }
+        else {
+            root_arr->next = last_node;
+        }
+        last_node = root_arr;
+        root_pt = root_arr;
     }
+
+    return root_pt;
+}
+
+int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
+
+    //tree_node* root_arr = (tree_node*)calloc(M, sizeof(tree_node));//might have to be M+1 cause we will add an extra element from time to time
+    //tree_node* root_arr[5];
+
+    list_node* root_list = (list_node*)calloc(L, sizeof(list_node));//might have to be L + 1
+    FILE* fp = fopen(argv[1], "r+");
+
+    //first fill the initial array and its leaf nodes
+    //then complete the more complex mid tree arrays and leaf nodes
+
+
 
 
     int output = -1;
     while (output != 0) {
-        output = insert_node(read_line(argc, argv, fp), root_arr, root_list);
+        output = insert_node (read_line(argc, argv, fp), create_root_arr(), root_list);
     }
 
     //print_results(); //os primeiros 24 e o root
