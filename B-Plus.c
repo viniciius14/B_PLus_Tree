@@ -44,8 +44,8 @@ typedef struct record_st {
 
 typedef struct list_node {
     struct list_node* next;
-    record_st* contents;
     struct list_node* prev;
+    record_st* contents;
     //tree_node* parent;          //only the first elem of the linked list will have this
 }list_node;
 
@@ -235,10 +235,10 @@ int insert_node(record_st* node, tree_node* arr, list_node* list) {
     }
     //check how many array ahs so we can add the first few
 
-    int elems_in_arr = 1;
+    int elems_in_arr = 0;
     //tree_node* pt = (&arr)[0]; pt->next != NULL; pt = pt->next
     for (int i = 0; i != L; i++) {
-        if ((&arr)[i]->list->contents != NULL) {
+        if ((&arr)[i]->list != NULL) {
             elems_in_arr++;
         }
     }
@@ -311,19 +311,40 @@ int insert_node(record_st* node, tree_node* arr, list_node* list) {
 
 int main(int argc, char* argv[]) {  //fazer ficheiro de saida com os nodes organizados desde o menor ate ao maior
 
-    tree_node* root_arr = (tree_node*)calloc(M, sizeof(tree_node));//might have to be M+1 cause we will add an extra element from time to time
-    list_node* root_list = (list_node*)calloc(L, sizeof(list_node));//might have to be L + 1
-    FILE* fp = fopen(argv[1], "r+");
+    //tree_node* root_arr = (tree_node*)calloc(M, sizeof(tree_node));//might have to be M+1 cause we will add an extra element from time to time
+    tree_node* root_arr[5] ={0};
+    list_node* root_list = (list_node*)calloc(L, sizeof(list_node));//might have to be L + 1    FILE* fp = fopen(argv[1], "r+");
 
     //first fill the initial array and its leaf nodes
     //then complete the more complex mid tree arrays and leaf nodes
+
+    tree_node* last_node = (tree_node*)calloc(1, sizeof(tree_node));//do the foor loop backwards so we can say next  = last node and current = last node
+    if (last_node == NULL) {
+        printf("Error allocating memory.");
+        return 0;
+    }
+
+    for (int i = M; i != 0; i--) {
+        root_arr[i]->parent = NULL;
+        root_arr[i]->child = NULL;
+        root_arr[i]->list = NULL;
+        if (i == M) {
+            root_arr[i]->next = NULL;
+        }
+        else {
+            root_arr[i]->next = last_node;
+        }
+
+        last_node = root_arr[i];
+    }
+
 
     int output = -1;
     while (output != 0) {
         output = insert_node(read_line(argc, argv, fp), root_arr, root_list);
     }
 
-    //print_results();
+    //print_results(); //os primeiros 24 e o root
 
     return 0;
 }
